@@ -1,0 +1,8 @@
+name: 'CTools Views Extender'
+type: module
+description: 'Adds fields to the block form from a view as a block display'
+core: 8.x
+package: Stingray
+dependencies:
+  - ctools
+  - ctools_views

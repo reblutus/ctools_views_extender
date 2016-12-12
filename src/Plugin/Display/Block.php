@@ -6,11 +6,9 @@
 
 namespace Drupal\ctools_views_extender\Plugin\Display;
 
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\Block\ViewsBlock;
 use Drupal\ctools_views\Plugin\Display\Block as CtoolsBlock;
-use Drupal\views\Plugin\views\filter\InOperator;
 
 /**
  * Provides a Block display plugin that allows for greater control over Views
@@ -85,7 +83,6 @@ class Block extends CtoolsBlock {
         $background = $form_state->getValue(['override', 'background']);
         $configuration['background'] = $background;
         // fix bug in Drupal which does not put the image as permanent
-//      kint($form_state->getValue(['override', 'background'])[0]);
         $fid = $form_state->getValue(['override', 'background'])[0];
         /** @var \Drupal\file\Entity\File $file */
         $file = \Drupal\file\Entity\File::load($fid);

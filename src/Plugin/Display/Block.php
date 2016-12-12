@@ -23,7 +23,9 @@ class Block extends CtoolsBlock {
     parent::optionsSummary($categories, $options);
     $filtered_allow = array_filter($this->getOption('allow'));
     $filter_options = [
-      'background' => $this->t('Background')
+      'background' => $this->t('Background'),
+      'padding_top' => $this->t('Padding top'),
+      'padding_bottom' => $this->t('Padding bottom')
     ];
     $filter_intersect = array_intersect_key($filter_options, $filtered_allow);
 
@@ -41,6 +43,8 @@ class Block extends CtoolsBlock {
     parent::buildOptionsForm($form, $form_state);
     $options = $form['allow']['#options'];
     $options['background'] = $this->t('Background');
+    $options['padding_top'] = $this->t('Padding top');
+    $options['padding_bottom'] = $this->t('Padding bottom');
     $form['allow']['#options'] = $options;
   }
 
@@ -60,6 +64,24 @@ class Block extends CtoolsBlock {
         '#description' => $this->t('Enter background image'),
         '#default_value' => isset($block_configuration['background'])?$block_configuration['background']:'',
         '#upload_location' => 'public://backgrounds'
+      );
+    }
+
+    if (!empty($allow_settings['padding_top'])) {
+      $form['override']['padding_top'] = array(
+        '#type' => 'textfield',
+        '#title' => $this->t('Padding Top'),
+        '#description' => $this->t('Enter the amount in pixel for the top padding"'),
+        '#default_value' => isset($block_configuration['padding_top'])?$block_configuration['paading_top']:''
+      );
+    }
+
+    if (!empty($allow_settings['padding_bottom'])) {
+      $form['override']['padding_bottom'] = array(
+        '#type' => 'textfield',
+        '#title' => $this->t('Padding Bottom'),
+        '#description' => $this->t('Enter the amount in pixel for the bottom padding"'),
+        '#default_value' => isset($block_configuration['padding_bottom'])?$block_configuration['paading_bottom']:''
       );
     }
 
@@ -89,6 +111,14 @@ class Block extends CtoolsBlock {
         /** @var \Drupal\file\FileUsage\DatabaseFileUsageBackend $file_usage */
         $file_usage = \Drupal::service('file.usage');
         $file_usage->add($file, 'ctools_views', 'image', 1);
+    }
+
+    if (!empty($allow_settings['padding_top'])) {
+      $configuration['padding_top'] = $form_state->getValue(['override', 'padding_top']);
+    }
+
+    if (!empty($allow_settings['padding_bottom'])) {
+      $configuration['padding_bottom'] = $form_state->getValue(['override', 'padding_bottom']);
     }
 
     $block->setConfiguration($configuration);

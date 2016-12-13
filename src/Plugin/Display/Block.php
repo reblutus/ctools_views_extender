@@ -72,7 +72,7 @@ class Block extends CtoolsBlock {
         '#type' => 'textfield',
         '#title' => $this->t('Padding Top'),
         '#description' => $this->t('Enter the amount in pixel for the top padding"'),
-        '#default_value' => isset($block_configuration['padding_top'])?$block_configuration['paading_top']:''
+        '#default_value' => isset($block_configuration['padding_top'])?$block_configuration['padding_top']:''
       );
     }
 
@@ -81,7 +81,7 @@ class Block extends CtoolsBlock {
         '#type' => 'textfield',
         '#title' => $this->t('Padding Bottom'),
         '#description' => $this->t('Enter the amount in pixel for the bottom padding"'),
-        '#default_value' => isset($block_configuration['padding_bottom'])?$block_configuration['paading_bottom']:''
+        '#default_value' => isset($block_configuration['padding_bottom'])?$block_configuration['padding_bottom']:''
       );
     }
 
@@ -102,15 +102,18 @@ class Block extends CtoolsBlock {
     $allow_settings = array_filter($this->getOption('allow'));
 
     if (!empty($allow_settings['background'])) {
-        $background = $form_state->getValue(['override', 'background']);
-        $configuration['background'] = $background;
-        // fix bug in Drupal which does not put the image as permanent
+      $background = $form_state->getValue(['override', 'background']);
+      $configuration['background'] = $background;
+
+      // fix bug in Drupal which does not put the image as permanent
+      if(array_key_exists(0, $background)){
         $fid = $form_state->getValue(['override', 'background'])[0];
         /** @var \Drupal\file\Entity\File $file */
         $file = \Drupal\file\Entity\File::load($fid);
         /** @var \Drupal\file\FileUsage\DatabaseFileUsageBackend $file_usage */
         $file_usage = \Drupal::service('file.usage');
         $file_usage->add($file, 'ctools_views', 'image', 1);
+      }
     }
 
     if (!empty($allow_settings['padding_top'])) {
